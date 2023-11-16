@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutterassignment/address/address_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutterassignment/main.config.dart';
+import 'package:flutterassignment/ui/screen/home/homescreen.dart';
+import 'package:flutterassignment/ui/themes/colors.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+
+final locator = GetIt.instance;
+
+@InjectableInit(
+  initializerName: 'initGetIt',
+  preferRelativeImports: true,
+  asExtension: false,
+)
+void configureDependencies() => initGetIt(locator);
 
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -11,68 +26,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(title: 'Flutter Gigabank assignment'),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  _navigateToAddAddressScreen() {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const AddressScreen(title: "Address screen"),
-        ),
-      );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            ElevatedButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.all(16.0),
-                textStyle: const TextStyle(fontSize: 20),
-                backgroundColor: Colors.blue,
-                elevation: 5,
-              ),
-              onPressed: _navigateToAddAddressScreen,
-              child: const Text('Add address', style: TextStyle(color: Colors.white)),
+    return ScreenUtilInit(
+        designSize: const Size(360, 690),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        useInheritedMediaQuery: true,
+        builder: (BuildContext context, Widget? child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              //primarySwatch: Colors.blue,
+              primaryColor: primaryColor,
+              colorScheme:
+                  const ColorScheme.light().copyWith(primary: primaryColor),
             ),
-          ],
-        ),
-      ),
-    );
+            home: const HomePage(title: 'Flutter Gigabank assignment'),
+          );
+        });
   }
 }
